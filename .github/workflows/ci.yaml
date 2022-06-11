@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+  
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            osName: Linux
+          - os: windows-latest
+            osName: Windows
+          - os: macos-latest
+            osName: MacOS
+    runs-on: ${{ matrix.os }}
+    name: 🧪 Test on ${{ matrix.osName }}
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v2
+      - name: 🐍 Get Python
+        uses: actions/setup-python@v1
+      - name: 🚚 Get Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+      - name: 🧪 Run Tests
+        run: pytest
